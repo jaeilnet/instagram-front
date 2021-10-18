@@ -1,7 +1,17 @@
+import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { PostList } from "../pages/PostList"
 import "./App.css"
 
 function App() {
-  return <h1>ㅎㅇㅇ</h1>
+  return (
+    <>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" component={PostList} />
+        </Switch>
+      </BrowserRouter>
+    </>
+  )
 }
 
 export default App
