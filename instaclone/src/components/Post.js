@@ -1,140 +1,66 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Text, Image } from "../elements"
-import { AiOutlineHeart, AiOutlineSmile } from "react-icons/ai"
-import { BsChat, BsBookmark } from "react-icons/bs"
-import { RiSendPlaneLine } from "react-icons/ri"
+import { useDispatch, useSelector } from "react-redux"
+import { actionsCreators as postActions } from "../redux/modules/post"
+import { CommentWrite } from "./CommentWrite"
+import { actionsCreators as commentActions } from "../redux/modules/comment"
 
 export const Post = (props) => {
+  const dispatch = useDispatch()
+  const post_list = useSelector((state) => state.post.post_list)
+
+  useEffect(() => {
+    dispatch(commentActions.get_comment_md())
+    dispatch(postActions.getPostMD())
+  }, [])
+
   return (
-    <>
-      <Container>
-        <PostContainer>
-          <Grid>
-            {/* <PostGrid> */}
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <PostProfileImg src={props.user_Profile} />
+    <Container>
+      {post_list.map((post, i) => {
+        return (
+          <PostContainer key={post._id}>
+            <Grid>
+              {/* <PostGrid> */}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Image profileImg src={props.user_Profile} />
 
-              <Text bold>{props.user_id}</Text>
-            </div>
-            {/* </PostGrid> */}
-            <div style={{ margin: "0px 15px" }}>
-              <button
-                style={{
-                  padding: "10px",
-                  border: "none",
-                  backgroundColor: "transparent",
-                  cursor: "pointer",
-                }}
-              >
-                <Text bold> ... </Text>
-              </button>
-            </div>
-          </Grid>
+                <Text bold>{post.postingAuthor}</Text>
+              </div>
+              {/* </PostGrid> */}
+              <div style={{ margin: "0px 15px" }}>
+                <button
+                  style={{
+                    padding: "10px",
+                    border: "none",
+                    backgroundColor: "transparent",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Text bold> ... </Text>
+                </button>
+              </div>
+            </Grid>
 
-          <Image></Image>
+            <Image src={props.postingImgUrl}></Image>
 
-          {/* 사진 바로 밑 */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "8px 8px",
-            }}
-          >
-            <div style={{ display: "flex" }}>
-              <AiOutlineHeart
-                style={{ padding: "8px", width: "26px", height: "26px" }}
-              />
-              <BsChat
-                style={{
-                  padding: "8px",
-                  width: "24px",
-                  height: "24px",
-                  transform: "scaleX(-1)",
-                }}
-              />
-              <RiSendPlaneLine
-                style={{ padding: "8px", width: "26px", height: "26px" }}
-              />
-            </div>
-            <div>
-              <BsBookmark
-                style={{ padding: "8px", width: "24px", height: "24px" }}
-              />
-            </div>
-          </div>
-
-          <div style={{ margin: "13px" }}>
-            <Text>{props.like_cnt} 좋아요</Text>
-          </div>
-
-          <div style={{ display: "flex", margin: "13px" }}>
-            <Text bold>{props.comment_contents} </Text>
-            <Text> ...more</Text>
-          </div>
-
-          <div style={{ margin: "13px" }}>
-            <Text>댓글 {props.comment_cnt}개 모두보기</Text>
-          </div>
-
-          <div style={{ margin: "13px" }}>
-            <Text size={10}>{props.comment_date} 시간전</Text>
-          </div>
-
-          <div style={{ margin: "8px", display: "flex" }}>
-            <AiOutlineSmile
-              style={{
-                width: "24px",
-                height: "24px",
-                padding: "5px 10px 5px 5px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="댓글을 작성해주세요"
-              style={{
-                padding: "5px",
-                boxSizing: "border-box",
-                width: "100%",
-                backgroundColor: "transparent",
-                border: "none",
-              }}
-            />
-            <div
-              style={{
-                minWidth: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <button
-                style={{
-                  border: "none",
-                  backgroundColor: "transparent",
-                  padding: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                <Text>게시</Text>
-              </button>
-            </div>
-          </div>
-        </PostContainer>
-      </Container>
-    </>
+            {/* 댓글작성 컴포넌트*/}
+            <CommentWrite post={post} />
+          </PostContainer>
+        )
+      })}
+    </Container>
   )
 }
 
 Post.defaultProps = {
-  user_Profile:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCdSE06g-wWMbwV39-LgNCI23dcrefSkhosA&usqp=CAU",
-  user_id: "jaeil",
-  like_cnt: "0",
-  comment_contents: "내용",
-  comment_cnt: "5",
-  comment_date: "1",
+  user_Profile: "https://www.codingfactory.net/wp-content/uploads/abc.jpg",
+  postingAuthor: "jaeil",
+  postingImgUrl: "https://www.codingfactory.net/wp-content/uploads/abc.jpg",
+  postingLike: "0",
+  postingComment: "내용",
+  postingComment_cnt: "5",
+  postingDate: "1",
 }
 
 const Grid = styled.div`

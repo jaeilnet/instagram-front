@@ -5,12 +5,6 @@ export const PostList = (props) => {
   return (
     <>
       <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
     </>
   )
 }
